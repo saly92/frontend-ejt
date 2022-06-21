@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import { Noun } from "./components/Noun";
 import {Book} from "./components/Book";
 import { useEffect, useState } from "react";
