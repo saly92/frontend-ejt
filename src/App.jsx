@@ -2,6 +2,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 const url = "http://localhost:3000/all";
+const separator='|'
 function App() {
     // const [siteData, setSiteData] = useState({});
     //search items:
@@ -29,6 +30,13 @@ function App() {
                     kind: "noun",
                     bulkSearch: item.singular,
                     item,
+                });
+            });
+            _siteData.books.forEach((item) => {
+                _searchItems.push({
+                    kind: "book",
+                    bulkSearch: item.title + separator + item.description, item
+                    
                 });
             });
             setSearchItems(_searchItems);
@@ -61,7 +69,7 @@ function App() {
                     />
                     <ul>
                         {filteredSearchItems.map((item, i) => {
-                            return <li key={i}>{item.kind} {item.item.singular} </li>;
+                            return <li key={i}>{item.kind} {item.item.singular} {item.item.title}</li>;
                         })}
                     </ul>
                 </>
