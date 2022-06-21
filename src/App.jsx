@@ -4,8 +4,8 @@ import axios from "axios";
 const url = "http://localhost:3000/all";
 function App() {
     // const [siteData, setSiteData] = useState({});
-//search items:
-/*[{
+    //search items:
+    /*[{
   kind:"noun",
   bulkSearch:"Nutiz",
   item:{
@@ -14,25 +14,35 @@ function App() {
     'plural':'die Notizen',
   },
 }]*/
-const [searchItems, setSearchItems] = useState([]);
+    const [searchItems, setSearchItems] = useState([]);
+    const [filteredSearchItems, setFilteredSearchItems] = useState([]);
+ 
 
     useEffect(() => {
         (async () => {
             const _siteData = (await axios.get(url)).data;
             // setSiteData(_siteData);
             // console.log(_siteData)
-            const _searchItems =[];
-              _siteData.nouns.forEach((item) => {
-                  _searchItems.push({
-                      kind: "noun",
-                      bulkSearch: item.singular,
-                      item,
-                  });
-              });
+            const _searchItems = [];
+            _siteData.nouns.forEach((item) => {
+                _searchItems.push({
+                    kind: "noun",
+                    bulkSearch: item.singular,
+                    item,
+                });
+            });
             setSearchItems(_searchItems);
+            setFilteredSearchItems([])
         })();
     }, []);
-
+    const handleSearch = (e) => {
+        const searchText = e.target.value;
+        if(searchText === ''){setFilteredSearchItems([]);}else{const _filteredSearchItems = searchItems.filter((m) =>
+            m.bulkSearch.toLowerCase().includes(searchText.toLowerCase())
+        );
+        setFilteredSearchItems(_filteredSearchItems); }
+        
+    };
     //wir sollen in backend erlauben dass unsere front End darauf kommen darf before wir uberhaubt anything displaying
     //cors origin problem
 
@@ -43,10 +53,15 @@ const [searchItems, setSearchItems] = useState([]);
                 <div>Loading...</div>
             ) : (
                 <>
-                    <div>There are {searchItems.length} items</div>
+                    {/* <div>There are {searchItems.length} items</div> */}
+                    <input
+                        type="text"
+                        autoFocus
+                        onChange={(e) => handleSearch(e)}
+                    />
                     <ul>
-                        {searchItems.map((item, i) => {
-                            return <li key={i}>{item.kind}</li>;
+                        {filteredSearchItems.map((item, i) => {
+                            return <li key={i}>{item.kind} {item.item.singular} </li>;
                         })}
                     </ul>
                 </>
