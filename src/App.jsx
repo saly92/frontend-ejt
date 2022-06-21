@@ -3,13 +3,33 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 const url = "http://localhost:3000/all";
 function App() {
-    const [siteData, setSiteData] = useState({});
+    // const [siteData, setSiteData] = useState({});
+//search items:
+/*[{
+  kind:"noun",
+  bulkSearch:"Nutiz",
+  item:{
+    'article':'die',
+    'singular':'Notiz',
+    'plural':'die Notizen',
+  },
+}]*/
+const [searchItems, setSearchItems] = useState([]);
 
     useEffect(() => {
         (async () => {
             const _siteData = (await axios.get(url)).data;
-            setSiteData(_siteData);
-            console.log(_siteData)
+            // setSiteData(_siteData);
+            // console.log(_siteData)
+            const _searchItems =[];
+              _siteData.nouns.forEach((item) => {
+                  _searchItems.push({
+                      kind: "noun",
+                      bulkSearch: item.singular,
+                      item,
+                  });
+              });
+            setSearchItems(_searchItems);
         })();
     }, []);
 
@@ -19,14 +39,14 @@ function App() {
     return (
         <div className="App">
             <div>Testing</div>
-            {Object.keys(siteData).length === 0 ? (
+            {Object.keys(searchItems).length === 0 ? (
                 <div>Loading...</div>
             ) : (
                 <>
-                    <div>There are {siteData.nouns.length} nouns</div>
+                    <div>There are {searchItems.length} items</div>
                     <ul>
-                        {siteData.nouns.map((noun, i) => {
-                            return <li key={i}>{noun.singular}</li>;
+                        {searchItems.map((item, i) => {
+                            return <li key={i}>{item.kind}</li>;
                         })}
                     </ul>
                 </>
