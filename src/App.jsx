@@ -1,3 +1,4 @@
+
 import "./App.scss";
 import { Noun } from "./components/Noun";
 import {Book} from "./components/Book";
@@ -8,7 +9,7 @@ import { Translation } from "./components/Translation";
 import { Job } from "./components/Job";
 import { LandscapePhoto } from "./components/LandscapePhoto";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 const baseUrl = "http://localhost:3007";
 const url = `${baseUrl}/all`;
@@ -139,7 +140,7 @@ _siteData.landscapePhotos.forEach((item) => {
                     <div className="searchItems">
                         {filteredSearchItems.map((item, i) => {
                             return (
-                                <>
+                                <React.Fragment key={i}>
                                     {item.kind === "noun" && (
                                         <Noun item={item.item} />
                                     )}
@@ -167,7 +168,7 @@ _siteData.landscapePhotos.forEach((item) => {
                                             baseUrl={baseUrl}
                                         />
                                     )}
-                                </>
+                           </React.Fragment>
                             );
                         })}
                     </div>
